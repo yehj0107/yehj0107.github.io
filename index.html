@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CTAP HID Demo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body onload="prepare()">
+  <div id="app" v-cloak>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">
+          CTAP HID Demo
+        </h1>
+        <p class="content">
+          <!-- https://stackoverflow.com/a/47033801/4768845 -->
+          <span v-if="platform_description" v-text="platform_description"></span>
+          <br>
+
+          <span v-if="webauthn_support" v-text="webauthn_support"></span>
+          <br>
+
+        </p>
+        <template v-if="is_linux">
+          <div class="message is-warning">
+            <div class="message-header">
+              <p>Linux needs udev rules</p>
+            </div>
+            <div class="message-body">
+              <p>On Linux, you likely need "udev rules" installed to use your key.</p>
+              <p>See <a href="https://docs.solokeys.io/solo/udev/">https://docs.solokeys.io/solo/udev/</a> for more information.</p>
+            </div>
+          </div>
+        </template>
+		<div>
+		SmartCardHSM Operations:<br>
+        <button onclick="select_applet()" class="button is-primary">SelectApplication</button>
+		<button onclick="initializae()" class="button is-primary">Initialize</button>
+		<button onclick="enumerate_object()" class="button is-primary">EnumerateObjects</button>
+		<button onclick="import_dkek()" class="button is-primary">importDKEK</button>
+		<button onclick="check_dkek()" class="button is-primary">checkDKEK</button>
+		<button onclick="login_status()" class="button is-primary">loginStatus</button>
+		<button onclick="sopin_status()" class="button is-primary">soPinStatus</button>
+		<button onclick="random_gen()" class="button is-primary">genRandom</button>
+		<br><br>
+		<input type="text" id="pin" name="pin" placeholder="user/so pin">&nbsp
+		<button onclick="login()" class="button is-primary">loginUserPin</button>
+		<button onclick="reset_pin_try_count()" class="button is-primary">resetPinTryCount</button>
+		<br><br>
+		<input type="text" id="oldpin" name="oldpin" placeholder="old pin">&nbsp
+		<input type="text" id="newpin" name="newpin" placeholder="new pin">&nbsp
+		<button onclick="change_pin()" class="button is-primary">changeUserPin</button>
+		<button onclick="change_pin_so()" class="button is-primary">changeSoPin</button>
+		<button onclick="change_pin_by_so()" class="button is-primary">changeUserPinBySoPin</button>
+		<br><br>
+		FID: <input type="text" id="fid" name="fid" placeholder="0xCC00" >&nbsp
+		<button onclick="select_object_app()" class="button is-primary">SelectObject</button>
+		<button onclick="create_object_app()" class="button is-primary">createObject</button>
+		<button onclick="delete_object_app()" class="button is-primary">deleteObject</button>
+		<button onclick="read_fid_bianry()" class="button is-primary">readBinary</button>
+		<button onclick="create_data_object()" class="button is-primary">createDataObject</button>
+		<br><br>
+		key ID: <input type="text" id="keyID" name="keyID" placeholder="1" >&nbsp
+		<button onclick="find_empty_key_id()" class="button is-primary">FindEmptyKeyID</button>
+		<button onclick="gen_key_rsa()" class="button is-primary">CreateRSAKey</button>
+		<button onclick="gen_key_ecc()" class="button is-primary">CreateECKey</button>
+		<button onclick="delete_key()" class="button is-primary">DeleteKey</button>
+		<button onclick="rsa_sign()" class="button is-primary">RSASign</button>
+		<button onclick="ecc_sign()" class="button is-primary">ECCSign</button>
+		<button onclick="rsa_decrypt()" class="button is-primary">RSADecrypt</button>
+		<button onclick="ecdh()" class="button is-primary">ECDH</button>
+		<button onclick="wrap()" class="button is-primary">WrapKey</button>
+		<button onclick="unwrap()" class="button is-primary">UnWrapKey</button>
+		<br><br>
+		<br>==================================================<br>
+		</div>
+		APDU Test<br>
+		APDU: <input type="text" id="apdu" name="apdu">
+        <button onclick="send_apdu()" class="button is-primary">Send</button>
+ 	    <br>==================================================<br>
+		<button onclick="clearMessage()" class="button is-primary">Clear</button><br><br>
+	    <div id='response'></div>
+      </div>
+	  
+    </section>
+ 
+  </div>
+</body>
+
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script async src="wasm/smartCardHsmApdu.js"></script>
+<script src="js/platform.js"></script>
+<script src="js/app.js"></script>
+<script src="js/smartCardHsmError.js"></script>
+<script src="js/smartCardHsmConfig.js"></script>
+<script src="js/smartCardHsm.js"></script>
+
+
+</html>
